@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <!--为了让IE浏览器运行最新的渲染模式-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+    <script type="text/javascript" src='https://a.amap.com/jsapi_demos/static/resource/capitals.js'></script>
+    <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.9&key=56b2d21881a02034416a37ceb0d2d093&plugin=AMap.PolyEditor"></script>
+    <link rel="stylesheet" href="css/mapList.css">
+    <title>地图操作</title>
+</head>
+<body>
+<!--移动端-->
+    <div class="page-group">
+        <div class="page page-current " id="page-3">
+            <!--主体-->
+            <div class="content native-scroll">
+                <div id="container"></div>
+            </div>
+            <!--图标-->
+            <div class="list-icon">
+                <span class=" fa fa-ellipsis-v" id="icon_1"></span>
+                <span class="fa fa-pencil-square-o" id="icon_9"></span>
+                <span class="fa fa-code-fork" id="icon_2"></span>
+                <span class="fa fa-deaf" id="icon_3"></span>
+                <span class="fa fa-check-square-o" id="icon_4"></span>
+                <span class="fa fa-cc-amex" id="icon_5"></span>
+                <span class="fa fa-plus" id="icon_6"></span>
+                <span class="fa fa-minus" id="icon_7"></span>
+                <span class="fa fa-search" id="icon_8"></span>
+
+
+            </div>
+        </div>
+    </div>
+   <!--提示框-->
+    <div class="alert_msg" style="display:none">
+        <div class="msg_1" style="display:none">
+            <select name="" id="msg_1_select" class="pull-left">
+
+            </select>
+
+            <span class="pull-right">
+                绘制管点
+            </span>
+        </div>
+
+        <div class="msg_9" style="display:none">
+            <span class="pull-right">
+                编辑管点
+            </span>
+        </div>
+
+        <div class="msg_2" >
+            <span class="pull-right">绘制管线</span>
+        </div>
+
+        <div class="msg_3" >
+            <span class="pull-right">请在管线上加点</span>
+        </div>
+
+        <div class="msg_4 pull-right list-block" >
+            <h4 style="margin:.4rem">测量收点</h4>
+            <ul style="background-color:#eee">
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title label">未测的点</div>
+                            <div class="item-input">
+                                <input type="text" placeholder=" " readonly >
+                            </div>
+                            <div class="item-input">
+                                <button class="button button-fill" type="button">查看</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </li>
+
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title label">物探编号</div>
+                            <div class="item-input">
+                                <input type="text" placeholder=" " readonly >
+                            </div>
+                        </div>
+
+                    </div>
+                </li>
+
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <button class="button button-fill" type="button">隐藏已测标志</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </li>
+
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title label">完成测点</div>
+                            <div class="item-input">
+                                <label class="label-switch">
+                                    <input type="checkbox">
+                                    <div class="checkbox"></div>
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                </li>
+
+            </ul>
+
+        </div>
+
+        <div class="msg_5 pull-right list-block">
+            <h4 style="margin:.4rem">测量长度</h4>
+
+            <ul style="background-color:#eee">
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title label">线条长度</div>
+                            <div class="item-input">
+                                <input type="text" placeholder=" " readonly >
+                            </div>
+                        </div>
+
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="msg_8 pull-right list-block" >
+            <h4 style="margin:.4rem">管点查询</h4>
+            <ul style="background-color:#eee">
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title label">物探编号</div>
+                            <div class="item-input">
+                                <input type="text" placeholder="请输入" >
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <button type="button" class="button button-fill">查询</button>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+   <!--弹出框架-->
+   <div class="alert_layer" style="display:none">
+       <!--新增第一个点的弹出框-->
+       <div class="layer_1" style="display:none">
+           <h4>点属性</h4>
+           <div class="list-block">
+               <ul>
+                   <!-- 排水管线表单 -->
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-name"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">物探点号</div>
+                               <div class="item-input">
+                                   <input type="text" placeholder="必填" class="WTID" data-required="required" readonly>
+                               </div>
+                           </div>
+                       </div>
+                   </li>
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-name"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">经度</div>
+                               <div class="item-input">
+                                   <input type="text" placeholder="请输入" class="Lng" readonly>
+                               </div>
+
+                           </div>
+                       </div>
+                   </li>
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-name"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">纬度</div>
+                               <div class="item-input">
+                                   <input type="text" placeholder="请输入" class="Lat" readonly>
+                               </div>
+
+                           </div>
+                       </div>
+                   </li>
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-email"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">管材</div>
+                               <!--<div class="item-input">-->
+                                   <!--<input type="text" placeholder="请选择" >-->
+
+                               <!--</div>-->
+                               <div class="item-input">
+                                   <select class="GXCZ">
+                                       <option value="无">无</option>
+                                       <option value="砼">砼</option>
+                                       <option value="钢">钢</option>
+                                       <option value="铸铁">铸铁</option>
+                                       <option value="塑料">塑料</option>
+                                       <option value="玻璃钢">玻璃钢</option>
+                                   </select>
+                               </div>
+                           </div>
+                       </div>
+                   </li>
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-email"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">特征</div>
+                               <!--<div class="item-input">-->
+                               <!--<input type="text" placeholder="请选择" >-->
+                               <!--</div>-->
+                               <div class="item-input">
+                                   <select class="TZD">
+                                       <option value="无">无</option>
+                                       <option value="弯点">弯点</option>
+                                       <option value="变径">变径</option>
+                                       <option value="塑料">塑料</option>
+                                       <option value="封头">封头</option>
+                                       <option value="预留口">预留口</option>
+                                       <option value="放水口">放水口</option>
+                                       <option value="变坡">变坡</option>
+                                       <option value="变质">变质</option>
+                                       <option value="边点">边点</option>
+                                   </select>
+                               </div>
+                           </div>
+                       </div>
+                   </li>
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-password"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">附属物</div>
+                               <!--<div class="item-input">-->
+                                   <!--<input type="text"  class="" placeholder="请选择" >-->
+
+                               <!--</div>-->
+                               <div class="item-input">
+                                   <select class="FSW">
+                                       <option value="无">无</option>
+                                       <option value="窨井">窨井</option>
+                                       <option value="消防栓">消防栓</option>
+                                       <option value="阀门">阀门</option>
+                                       <option value="水表">水表</option>
+                                       <option value="水表">水表</option>
+                                       <option value="水表组">水表组</option>
+                                   </select>
+                               </div>
+                           </div>
+                       </div>
+                   </li>
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-gender"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">管径</div>
+                               <div class="item-input">
+                                   <input type="text" class="GJ" placeholder="必填" data-required="required">
+                               </div>
+                           </div>
+                       </div>
+                   </li>
+
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-calendar"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">埋深</div>
+                               <div class="item-input">
+                                   <input type="text" class="MS" placeholder="必填" data-required="required">
+                               </div>
+                           </div>
+                       </div>
+                   </li>
+
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-calendar"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">根数</div>
+                               <div class="item-input">
+                                   <input type="text" class="GS" placeholder="选填">
+                               </div>
+                           </div>
+                       </div>
+                   </li>
+
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-calendar"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">埋设年代</div>
+                               <div class="item-input">
+                                   <input type="text" class="MSND" placeholder="选填">
+                               </div>
+                           </div>
+                       </div>
+                   </li>
+
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-calendar"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">连接方向</div>
+                               <div class="item-input">
+                                   <select class="LJFX"></select>
+                               </div>
+                           </div>
+                       </div>
+                   </li>
+
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-calendar"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">备注</div>
+                               <div class="item-input">
+                                   <select class="BZ">
+                                       <option value="无">无</option>
+                                       <option value="旧管">旧管</option>
+                                       <option value="接旧管">接旧管</option>
+                                       <option value="出地">出地</option>
+                                       <option value="出露">出露</option>
+                                       <option value="入户">入户</option>
+                                       <option value="非测区">非测区</option>
+                                       <option value="一井多盖">一井多盖</option>
+                                       <option value="超大窨井">超大窨井</option>
+                                       <option value="架空">架空</option>
+                                       <option value="进墙">进墙</option>
+                                       <option value="定向钻">定向钻</option>
+                                   </select>
+
+                               </div>
+                           </div>
+                       </div>
+                   </li>
+
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-calendar"></i></div>
+                           <div class="item-inners">
+                               <a href="javascript:;" class="cancel external">取消</a>
+                               <a href="javascript:;" class="sure">确定</a>
+                               <input type="hidden" class="projectID">
+                               <input type="hidden" class="table" value="PipePointA">
+                               <input type="hidden" class="tag" value="new"/>
+                               <input type="hidden" class="ismeasure">
+                           </div>
+                       </div>
+                   </li>
+
+               </ul>
+                <!--非排水-->
+               <ul style="display:none;overflow-y: auto">
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-name"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">物探点号</div>
+                               <div class="item-input">
+                                   <input type="text" placeholder="必填" class="WTID" data-required="required" readonly>
+                               </div>
+                           </div>
+                       </div>
+                   </li>
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-name"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">经度</div>
+                               <div class="item-input">
+                                   <input type="text" placeholder="请输入" class="Lng" readonly>
+                               </div>
+
+                           </div>
+                       </div>
+                   </li>
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-name"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">纬度</div>
+                               <div class="item-input">
+                                   <input type="text" placeholder="请输入" class="Lat" readonly>
+                               </div>
+                           </div>
+                       </div>
+                   </li>
+                   <li>
+                   <div class="item-content">
+                       <div class="item-media"><i class="icon icon-form-email"></i></div>
+                       <div class="item-inner">
+                           <div class="item-title label">管材</div>
+                           <!--<div class="item-input">-->
+                               <!--<input type="text" placeholder="请选择" >-->
+                           <!--</div>-->
+                           <div class="item-input">
+                               <select class="GXCZ">
+                                   <option>无</option>
+                                   <option>Female</option>
+                               </select>
+                           </div>
+                       </div>
+                   </div>
+               </li>
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-email"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">特征</div>
+                               <!--<div class="item-input">-->
+                                   <!--<input type="text" placeholder="请选择" >-->
+                               <!--</div>-->
+                               <div class="item-input">
+                                   <select class="TZD">
+                                       <option>无</option>
+
+                                   </select>
+                               </div>
+                           </div>
+                       </div>
+                   </li>
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-password"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">附属物</div>
+                               <!--<div class="item-input">-->
+                                   <!--<input type="text"  class="" placeholder="请选择" >-->
+                               <!--</div>-->
+                               <div class="item-input">
+                                   <select class="FSW">
+                                       <option>无</option>
+                                       <option>Female</option>
+                                   </select>
+                               </div>
+                           </div>
+                       </div>
+                   </li>
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-password"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">管径</div>
+                               <div class="item-input">
+                                   <input type="text"   placeholder="必填" class="GJ" data-required="required">
+                               </div>
+
+                           </div>
+                       </div>
+                   </li>
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-password"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">发射方法</div>
+                               <!--<div class="item-input">-->
+                                   <!--<input type="text"  class="" placeholder="请选择" >-->
+                               <!--</div>-->
+                               <div class="item-input" >
+                                   <select class="JFFF">
+                                       <option>直接连接</option>
+                                       <option>夹钳</option>
+                                       <option>感应</option>
+                                       <option>其他</option>
+                                   </select>
+                               </div>
+                           </div>
+                       </div>
+                   </li>
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-password"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">定深方法</div>
+
+                               <div class="item-input">
+                                   <select class="DSFF">
+                                       <option value="直读">直读</option>
+                                       <option value="百分比">百分比</option>
+                                       <option value="特征点">特征点</option>
+                                       <option value="钎探">钎探</option>
+                                       <option value="开挖">开挖</option>
+                                       <option value="实地量测">实地量测</option>
+                                       <option value="雷达">雷达</option>
+                                       <option value="据调绘资料">据调绘资料</option>
+                                       <option value="内插">内插</option>
+                                   </select>
+                               </div>
+                           </div>
+                       </div>
+                   </li>
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-password"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">仪器探测(m)</div>
+                               <div class="item-input">
+                                   <input type="text"  placeholder="选填" class="TC">
+                               </div>
+
+                           </div>
+                       </div>
+                   </li>
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-password"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">校正后(m)</div>
+                               <div class="item-input">
+                                   <input type="text"   placeholder="选填" class="JZH">
+                               </div>
+
+                           </div>
+                       </div>
+                   </li>
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-password"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">管顶(m)</div>
+                               <div class="item-input">
+                                   <input type="text"   placeholder="必填" class="GD" data-required="required">
+                               </div>
+
+                           </div>
+                       </div>
+                   </li>
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-password"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">根数</div>
+                               <div class="item-input">
+                                   <input type="text"   placeholder="选填" class="GS">
+                               </div>
+
+                           </div>
+                       </div>
+                   </li>
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-password"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">连接方向</div>
+                               <div class="item-input">
+                                   <select class="LJFX"></select>
+                               </div>
+
+                           </div>
+                       </div>
+                   </li>
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-password"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">备注</div>
+                               <div class="item-input">
+                                   <select name=""class="BZ">
+
+                                   </select>
+
+                               </div>
+
+                           </div>
+                       </div>
+                   </li>
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-calendar"></i></div>
+                           <div class="item-inners">
+                               <a href="javascript:;" class="cancel external">取消</a>
+                               <a href="javascript:;" class="sure">确定</a>
+                               <input type="hidden" class="projectID">
+                               <input type="hidden" class="table" value="PipePointB">
+                               <input type="hidden" class="tag" value="new"/>
+                               <input type="hidden" class="ismeasure">
+                           </div>
+                       </div>
+                   </li>
+               </ul>
+           </div>
+
+       </div>
+
+       <div class="layer_2">
+           <h4>方向线属性</h4>
+           <div class="list-block">
+               <ul>
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-name"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">起始点号</div>
+                               <div class="item-input">
+                                   <input type="text" placeholder="请输入" >
+                               </div>
+                           </div>
+                       </div>
+                   </li>
+
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-name"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">终止点号</div>
+                               <div class="item-input">
+                                   <input type="text" placeholder="请输入" >
+                               </div>
+                           </div>
+                       </div>
+                   </li>
+
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-name"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">起始埋深</div>
+                               <div class="item-input">
+                                   <input type="text" placeholder="请输入" >
+                               </div>
+                           </div>
+                       </div>
+                   </li>
+
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-name"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">管径</div>
+                               <div class="item-input">
+                                   <input type="text" placeholder=""  style="border-bottom:1px solid #000">
+
+                               </div>
+                                <span>X</span>
+                               <div class="item-input">
+                                   <input type="text" placeholder="" style="border-bottom:1px solid #000;">
+                               </div>
+
+                               <div class="item-input" style="margin-left:.3rem">
+                                   <input type="text" placeholder="" style="border-bottom:1px solid #000">
+                               </div>
+
+                               <span>孔</span>
+
+                           </div>
+                       </div>
+                   </li>
+
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-name"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">管材</div>
+                               <div class="item-input">
+                                   <input type="text" placeholder="请选择" >
+                               </div>
+                               <div class="item-input">
+                                   <select name="" id="">
+                                       <option value="">无</option>
+                                   </select>
+                               </div>
+                           </div>
+                       </div>
+                   </li>
+
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-name"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">起点备注</div>
+                               <div class="item-input">
+                                   <input type="text" placeholder="请选择" >
+                               </div>
+                               <div class="item-input">
+                                   <select name="" id="">
+                                       <option value="">无</option>
+                                   </select>
+                               </div>
+                           </div>
+                       </div>
+                   </li>
+
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-name"></i></div>
+                           <div class="item-inner">
+                               <div class="item-title label">终点备注</div>
+                               <div class="item-input">
+                                   <input type="text" placeholder="请选择" >
+                               </div>
+                               <div class="item-input">
+                                   <select name="" id="">
+                                       <option value="">无</option>
+                                   </select>
+                               </div>
+                           </div>
+                       </div>
+                   </li>
+
+                   <li>
+                       <div class="item-content">
+                           <div class="item-media"><i class="icon icon-form-name"></i></div>
+                           <div class="item-inner">
+                               <div class="item-input">
+                                   <a href="#" class="direction_cancel">取消</a>
+                               </div>
+                               <div class="item-input" style="text-align: right">
+                                   <a href="#" class="go_on">继续</a>
+                                   <a href="#" class="direction_sure" style="margin:0rem .75rem">确定</a>
+                               </div>
+                           </div>
+                       </div>
+                   </li>
+
+               </ul>
+           </div>
+
+       </div>
+   </div>
+
+
+    <script src="script/mapList.init.js?t=2017"></script>
+    <script data-main="../../init/project.premium.init.js?t=2017" src="../../libs/requirejs/require.min.js"></script>
+</body>
+</html>

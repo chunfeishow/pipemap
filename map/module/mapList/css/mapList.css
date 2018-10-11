@@ -1,0 +1,173 @@
+
+@import url("../../../libs/font-awesome/font-awesome.min.css");
+@import url("../../../libs/map/mapMain.css");
+
+
+/*@import url("../libs/bootstrap/bootstrap.min.css");*/
+@import  url('../../../libs/sm/sm.css');
+p{margin:0;}
+.list-block>ul>li:not(:last-child) .item-content{
+    padding-left:0;
+    border-bottom:1px solid #ccc;
+}
+.list-block .item-media+.item-inner{
+    margin-left:0;
+    padding-right:0;
+}
+.list-block select{
+    -webkit-appearance: menulist-button;
+    -moz-appearance: menulist-button;
+    -ms-appearance: menulist-button;
+    appearance: menulist-button
+}
+.list-block{
+    margin:0;
+}
+.list-icon{
+    position:absolute;
+    width:13%;
+    z-index:100;
+    background-color:#fff;
+    border-radius:4px;
+    padding:.3rem;
+    text-align:center;
+    right:0;
+}
+.list-icon>span{
+    background: #eee;
+    margin-bottom:.3rem;
+    display: block;
+    font-size:1.3rem !important;
+
+}
+.list-icon>span:after{
+    clear:both;
+    display:block;
+    content:'';
+}
+/*遮盖层*/
+.alert_layer{
+    position:absolute;
+    background:rgba(0,0,0,0.4);
+    z-index:10000;
+    width:100%;
+    height:100%;
+    overflow-y: auto;
+}
+.layer_1,.layer_2{
+    width:90%;
+    background-color:#fff;
+    padding:0rem .5rem 1.5rem;
+    top:0%;
+    left:50%;
+    position: absolute;
+    transform:translate(-50%,0%);
+}
+.layer_1 label,.layer_2 label{
+    width:30%;
+    vertical-align: bottom;
+}
+.layer_1>form>div,.layer_2>form>div{
+    margin-bottom:1rem;
+}
+.layer_2 .pipe>input{
+    width:17%;
+}
+.skelp input{width:30%}
+
+.direction_go{
+    margin-right:1rem;
+}
+/*拍照*/
+.file {
+    position: relative;
+    background: #eee;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: .2rem 0rem;
+    width:100%;
+    display:block;
+    overflow: hidden;
+    color: #000;
+    text-decoration: none;
+    text-indent: 0;
+    line-height: 20px;
+    height: 1.35rem;
+    text-align:center;
+    font-size: .7rem;
+}
+.fill-default{
+    background-color:#eee !important;
+    border:none !important;
+    color:#000 !important;
+}
+.file input {
+    position: absolute;
+    right: 0;
+    top: 0;
+    opacity: 0;
+}
+.file:hover {
+    background: #eee;
+    border-color: #eee;
+    color: #000;
+    text-decoration: none;
+}
+.col-xs-3{
+    padding-left:0px;
+}
+#special-points,#attached{
+    width:40%;
+}
+#attached-list,#points-select{
+    width:24%;
+}
+
+.alert_msg{
+    position:absolute;
+    z-index:10000;
+    width:87%;
+    padding:.3rem;
+}
+.alert_msg span{
+    height:2rem;
+    line-height:2rem;
+    background-color:#eee;
+}
+.submit{
+    margin-right:2rem;
+}
+.alert_msg>div:after{
+    content:'';
+    clear:both;
+    display:block;
+}
+.msg_4,.msg_5,.msg_8{
+    background-color:#eee;
+    width:90%;
+}
+.msg_4>form{
+    padding:.5rem;
+}
+.msg_4>form>div{
+    margin:.3rem 0;
+}
+.msg_4>form input[type=text],.msg_5>form input[type=text],.msg_8>form input[type=text]{
+    display:inline-block;
+    background: #eee;
+    width:30%;
+
+}
+.msg_4>form label,.msg_5>form label,.msg_8>form label{
+    width:30%;
+    text-align: right;
+}
+
+.sure{
+    margin:0 1rem;
+}
+.amap-marker-label{
+    border: none;
+  background-color: transparent;
+    font-weight: bold;
+}

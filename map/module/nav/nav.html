@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>导航页</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <!--为了让IE浏览器运行最新的渲染模式-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+    <link rel="stylesheet" href="css/nav.css">
+</head>
+<body>
+<div class="page-group">
+    <div class="page " id="page-2">
+        <header class="bar bar-nav">
+            <a href="#" class="button pull-left back" >返回</a>
+            <button class="button pull-right" id="save">
+                保存
+            </button>
+            <h1 class="title">工程信息</h1>
+        </header>
+        <!--工具栏-->
+        <nav class="bar bar-tab">
+            <a class="tab-item external" >
+                导出数据
+            </a>
+            <a class="tab-item external infile file" id="file">
+                导入数据
+            </a>
+            <a class="tab-item external" href="javacript:;" id="removeProject">
+                删除工程
+            </a>
+            <a class="tab-item external openProject" href="javascript:;">
+                打开工程
+            </a>
+
+        </nav>
+        <!--主体-->
+        <div class="content native-scroll">
+            <div class="list-block">
+                <ul id="showProject">
+                        <li>
+                            <div class="item-content">
+                                <div class="item-media"><i class="icon icon-form-name"></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title label">工程名字</div>
+                                    <div class="item-input">
+                                        <input type="text" placeholder="请输入测区" id="name" data-required="required"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="item-content">
+                                <div class="item-media"><i class="icon icon-form-name"></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title label">管线类型</div>
+                                    <div class="item-input">
+                                        <select id="GXLX">
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="item-content">
+                                <div class="item-media"><i class="icon icon-form-name"></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title label">测区</div>
+                                    <div class="item-input">
+                                        <input type="text" placeholder="请输入测区" id="CQ" data-required="required"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="item-content">
+                                <div class="item-media"><i class="icon icon-form-name"></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title label">工程编号</div>
+                                    <div class="item-input">
+                                        <input type="text"  placeholder="请输入工程编号" id="GCBH" data-required="required"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="item-content">
+                                <div class="item-media"><i class="icon icon-form-name"></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title label">图幅编号</div>
+                                    <div class="item-input">
+                                        <input type="text"  placeholder="请输入图幅编号" id="TFBH" data-required="required"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="item-content">
+                                <div class="item-media"><i class="icon icon-form-name"></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title label">操作人</div>
+                                    <div class="item-input">
+                                        <input type="text"   id="CZR" placeholder="请输入操作人" data-required="required"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="item-content">
+                                <div class="item-media"><i class="icon icon-form-name"></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title label">填表人</div>
+                                    <div class="item-input">
+                                        <input type="text"   id="JLR" placeholder="请输入填表人" id="JLR" data-required="required"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="item-content">
+                                <div class="item-media"><i class="icon icon-form-name"></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title label">填表日期</div>
+                                    <div class="item-input">
+                                        <input type="date"   id="RQ" class="time" placeholder="请输入日期" data-required="required"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="item-content">
+                                <div class="item-media"><i class="icon icon-form-name"></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title label">校核人</div>
+                                    <div class="item-input">
+                                        <input type="text"   id="JHR" placeholder="请输入校核人" />
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="item-content">
+                                <div class="item-media"><i class="icon icon-form-name"></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title label">校核日期</div>
+                                    <div class="item-input">
+                                        <input type="date"   id="JHRQ" class="time" placeholder="请输入日期" />
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="item-content">
+                                <div class="item-media"><i class="icon icon-form-name"></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title label">检查人</div>
+                                    <div class="item-input">
+                                        <input type="text"   id="JCR" placeholder="请输入检查人" />
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="item-content">
+                                <div class="item-media"><i class="icon icon-form-name"></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title label">检查日期</div>
+                                    <div class="item-input">
+                                        <input type="date"   id="JCRQ"  class="time" placeholder="请输入日期" />
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="item-content">
+                                <div class="item-media"><i class="icon icon-form-name"></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title label">更新日期</div>
+                                    <div class="item-input">
+                                        <input type="date"   id="updatatime"  placeholder="" readonly/>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="item-content">
+                                <div class="item-media"><i class="icon icon-form-name"></i></div>
+                                <div class="item-inner">
+                                    <div class="item-title label">下载日期</div>
+                                    <div class="item-input">
+                                        <input type="date"   id="uploadtime"  placeholder="" readonly/>
+                                        <input type="hidden" id="projectId" />
+                                        <input type="hidden" id="tag"/>
+                                        <input type="hidden" id="index">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <!--<li>-->
+                        <!--<div class="item-content">-->
+                        <!--<div class="item-media"><i class="icon icon-form-name"></i></div>-->
+                        <!--<div class="item-inner">-->
+                        <!--<div class="item-title label">创建时间</div>-->
+                        <!--<div class="item-input">-->
+                        <!--<input type="text"  disabled id="create-time"/>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--</li>-->
+
+                        <!--<li>-->
+                        <!--<div class="item-content">-->
+                        <!--<div class="item-media"><i class="icon icon-form-name"></i></div>-->
+                        <!--<div class="item-inner">-->
+                        <!--<div class="item-title label">更新时间</div>-->
+                        <!--<div class="item-input" >-->
+                        <!--<input type="text"  disabled id="updateTime"/>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--</li>-->
+
+                        <!--<li>-->
+                        <!--<div class="item-content">-->
+                        <!--<div class="item-media"><i class="icon icon-form-name"></i></div>-->
+                        <!--<div class="item-inner">-->
+                        <!--<div class="item-title label">导出时间</div>-->
+                        <!--<div class="item-input">-->
+                        <!--<input type="text"  disabled id="load-data"/>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--</li>-->
+
+                    </ul>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="page page-current" id="page-1">
+        <header class="bar bar-nav">
+            <h1 class="title">工程列表</h1>
+            <a href="#page-2" class="button pull-right" id="create">新建</a>
+        </header>
+        <div class="content native-scroll">
+            <div class="list-block">
+                <ul id="project-list">
+
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+<script src="script/nav.init.js?t=2017"></script>
+<script data-main="../../init/project.premium.init.js?t=2017" src="../../libs/requirejs/require.min.js"></script>
+</body>
+</html>
