@@ -13,9 +13,9 @@ define(["core/dcins",'sqlite' ], function() {
 
             db.CreateTable("ProjectList", "id integer primary key autoincrement , name char(50),updatatime date, uploadtime date,ctime date,ismeasure int,projectID int");
             //  物探点录入信息表A（适用于排水管线）
-            db.CreateTable("PipePointA", "id integer primary key autoincrement , name char(50),Lon double,Lat double,H double,WTID char(10), GXCZ char(10),TZD char(10),FSW char(10),GJ char(10),MS double,GS int, MSND int,LJFX char(10),BZ char(50),ismeasure int,projectID int");
+            db.CreateTable("PipePointA", "id integer primary key autoincrement , name char(50),Lng double,Lat double,H double,WTID char(10), GXCZ char(10),TZD char(10),FSW char(10),GJ char(10),MS double,GS int, MSND int,LJFX char(10),BZ char(50),ismeasure int,projectID int");
             //  物探点录入信息表B（适用于非排水管线）
-            db.CreateTable("PipePointB", "id integer primary key autoincrement , name char(50),Lon double,Lat double,H double,WTID char(10), GXCZ char(10),TZD char(10),FSW char(10),GJ char(10),JFFF char(20),DSFF char(20),TC double,JZH double,GD chauble,LJFX char(10),BZ char(50),ismeasure int,projectID int");
+            db.CreateTable("PipePointB", "id integer primary key autoincrement , name char(50),Lng double,Lat double,H double,WTID char(10), GXCZ char(10),TZD char(10),FSW char(10),GJ char(10),JFFF char(20),DSFF char(20),TC double,JZH double,GD chauble,LJFX char(10),BZ char(50),ismeasure int,projectID int");
             //  辅助表A（排水）
             db.CreateTable("metadataA", "id integer primary key autoincrement , name char(50),GXLX char(20), CQ char(10),GCBH char(50),TFBH char(20),CZR char(20),JLR char(20), RQ data,JHR char(10),JHRQ data,JCR char(10), JCRQ data,updatatime date, uploadtime date");
             //  辅助表B（适用于非排水）
