@@ -153,15 +153,7 @@ define(['suijs','moxie','plupload'], function () {
                 $('input[type=text]').val('');
                 $('input[type=file]').val('');
                 $('.alert_layer,.alert_layer>div').css('display','none');
-//              //清除覆盖物
-//              if(_this.clickMarks[0]){
-//                  _this.clickMarks[0].setMap(null);//圆点
-//              }
-//
-//              if($('.tag').val()=='edit'){
-//                  var extData = _this.cliclIng.getExtData();
-//                  _this.cliclIng.setPosition([extData.Lng,extData.Lat])
-//              }
+//              
             })
 
         },
@@ -563,13 +555,13 @@ define(['suijs','moxie','plupload'], function () {
             return key;
         },
         /*连接方向的点*/
-       _initLJFX:function(data,elem){
-           elem.html('');
-           elem.append('<option value="-1">无</option>');
-           for(var i=0;i<data.length;i++) {
-               elem.append(`<option value="${data[i]['WTID']}">${data[i]['WTID']}</option>`);
-           }
-       },
+//     _initLJFX:function(data,elem){
+//         elem.html('');
+//         elem.append('<option value="-1">无</option>');
+//         for(var i=0;i<data.length;i++) {
+//             elem.append(`<option value="${data[i]['WTID']}">${data[i]['WTID']}</option>`);
+//         }
+//     },
       linkPoint:function(data,ALLdata){
           // console.log(ALLdata);
           for(var i=0;i<ALLdata.length;i++) {
