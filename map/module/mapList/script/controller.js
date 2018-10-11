@@ -150,6 +150,18 @@ define(['suijs','moxie','plupload'], function () {
             //确定事件
             $('.sure').on('click',function(){
                 _this.saveMarkTable();
+                 $('input[type=text]').val('');
+                $('input[type=file]').val('');
+                $('.alert_layer,.alert_layer>div').css('display','none');
+                //清除覆盖物
+                if(_this.clickMarks[0]){
+                    _this.clickMarks[0].setMap(null);//圆点
+                }
+
+                if($('.tag').val()=='edit'){
+                    var extData = _this.cliclIng.getExtData();
+                    _this.cliclIng.setPosition([extData.Lng,extData.Lat])
+                }
             })
 
         },
