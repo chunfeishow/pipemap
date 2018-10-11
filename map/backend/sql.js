@@ -68,8 +68,8 @@ define(["core/dcins",'sqlite' ], function() {
         /**
          * 删除辅助表数据
          */
-        deletePro:function(table,colomun,value){
-            db.toDelete(table,colomun +" =?",[value]);
+        deletePro:function(table,colomun,value,callback){
+            db.toDelete(table,colomun +" =?",[value],callback);
         },
 
         /**
@@ -113,8 +113,8 @@ define(["core/dcins",'sqlite' ], function() {
         /**
          * 删除管点表数据
          */
-        deletePoint:function(table,colomun,value){
-            db.toDelete(table,colomun +" =?",value);
+        deletePoint:function(table,colomun,value,callback){
+            db.toDelete(table,colomun +" =?",value,callback);
         },
 
         /**
