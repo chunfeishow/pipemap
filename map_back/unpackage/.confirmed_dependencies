@@ -1,0 +1,13 @@
+{
+  "module/nav/nav.html": {
+    "href": "module/nav/nav.html",
+    "resources": [
+      "module/nav/css/nav.css",
+      "module/nav/script/nav.init.js",
+      "init/project.premium.init.js",
+      "libs/requirejs/require.min.js"
+    ],
+    "refer": [],
+    "priority": 0
+  }
+}

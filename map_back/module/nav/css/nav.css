@@ -1,0 +1,24 @@
+@import  url('../../../libs/sm/sm.css');
+@import url("../../../libs/font-awesome/font-awesome.min.css");
+.list-block{
+    margin-top:0;
+}
+.content{
+    background-color:#fff;
+}
+.bottom-data{
+    padding:0.5rem  1.5rem 2.55rem 1.5rem;
+    height:2rem;
+    line-height:2rem;
+    background-color:#eee;
+}
+.bottom-data span{
+    border:2px solid #15BDEF;
+    border-radius:100%;
+    width:1.5rem;
+    height:1.5rem;
+    text-align:center;
+    font-size:1.5rem;
+    color:#15BDEF;
+    line-height:1.5rem;
+}
