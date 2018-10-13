@@ -1,4 +1,4 @@
-define(['suijs','moxie','plupload'], function () {
+define(['suijs','moxie','plupload','layer'], function () {
     var Controller = L.Class.extend({
 
         clickMarks:[],
@@ -7,6 +7,10 @@ define(['suijs','moxie','plupload'], function () {
         savePoint:[],
         savePointMark:[],
         cliclIng:null,//当前正在编辑的点的标记
+        distancePoly:[],
+        EditEvent:null,
+        distanceEvent:null,
+        dragEvent:null,
         initialize:function(){
             this._initMap();
             this._default();
@@ -19,32 +23,38 @@ define(['suijs','moxie','plupload'], function () {
             var href = (decodeURI(window.location.search)).slice(1);
            var href= href.split('=');
            $('.projectID').val(href[1]);
-
+           $('#removeMark').html('');
            //排水
             DCI.app.backend.queryPoint('PipePointA','projectID',href[1],function(data){
-
+                $('#removeMark').html('');
                 for(var i=0;i<data.length;i++){
                     //描绘出点
                    var mark= _this.setMark([data[i].Lng,data[i].Lat],data[i]['WTID'],data[i]);
                     //_this.setText([data[i].Lng,data[i].Lat],data[i]['WTID']);
                     _this.savePoint.push(mark);
                     _this.linkPoint(data[i],data)
+                    $('#removeMark').append(`<li data-id="${data[i]['WTID']}" data-table="PipePointA"><span style="display:inline-block;width:50%">${data[i]['WTID']}</span><input type="checkbox"/></li>`)
 
                 }
                 _this._initLJFX(data,$('.LJFX').eq(0));
+
             });
             //非排水
             DCI.app.backend.queryPoint('PipePointB','projectID',href[1],function(data){
+
                 for(var i=0;i<data.length;i++){
                     //描绘出点
                     var mark=_this.setMark([data[i].Lng,data[i].Lat],data[i]['WTID'],data[i]);
                     //_this.setText([data[i].Lng,data[i].Lat],data[i]['WTID']);
                     _this.savePoint.push(mark);
+                    $('#removeMark').append(`<li data-id="${data[i]['WTID']}" data-table="PipePointB"><span style="display:inline-block;width:50%">${data[i]['WTID']}</span><input type="checkbox"/></li>`);
                 }
                 _this._initLJFX(data,$('.LJFX').eq(1));
                 //对所有的点进行连线，如果有的话
+                //_this.mapObj.setFitView();
 
             });
+
         },
         _bind:function(){
             var _this=this;
@@ -90,11 +100,14 @@ define(['suijs','moxie','plupload'], function () {
             },this))
 
             $('#icon_4').on('click',$.proxy(function(){
-                this._oneMapEvent(4,_this._fourClickMap);
+                this.showDiv(4);
+                //this._oneMapEvent(4,_this._fourClickMap);
             },this))
 
             $('#icon_5').on('click',$.proxy(function(){
-                this._oneMapEvent(5,_this._fiveClickMap);
+               // this._oneMapEvent(5,_this._fiveClickMap);
+                this.showDiv(5);
+                this._fiveClickMap([]);
             },this))
 
             $('#icon_6').on('click',$.proxy(function(){
@@ -150,11 +163,76 @@ define(['suijs','moxie','plupload'], function () {
             //确定事件
             $('.sure').on('click',function(){
                 _this.saveMarkTable();
-                $('input[type=text]').val('');
-                $('input[type=file]').val('');
-                $('.alert_layer,.alert_layer>div').css('display','none');
-//              
             })
+
+            //删除
+            $('#allSelect').click(function(){
+               var checked = $('#allSelect')[0].checked;
+                //下面按钮全选或者全不全
+                $('.msg_4 ul input[type="checkbox"]').prop('checked',checked);
+            })
+            $('.msg_4 ul ').on('click','input[type="checkbox"]',function(){
+                var flag;
+                var inputs=$('.msg_4 ul input[type="checkbox"]');
+                for(var i=0;i<inputs.length;i++){
+                    flag=inputs[i].checked;
+                    if(!flag){
+                        i=inputs.length;
+                        $('#allSelect').prop('checked',false);
+                        return;
+                    }
+                }
+                if(flag){
+                    $('#allSelect').prop('checked',true);
+                }else{
+                    $('#allSelect').prop('checked',false);
+                }
+            })
+            $('.removeMarkBtn').on('click',function(){
+                var flag,selectArr=[];
+                var inputs=$('.msg_4 ul input[type="checkbox"]');
+                for(var i=0;i<inputs.length;i++){
+                    flag=inputs[i].checked;
+                    if(flag){
+                       var WTID= $('.msg_4 ul>li').eq(i).attr('data-id');
+                       var table=$('.msg_4 ul>li').eq(i).attr('data-table');
+                        selectArr.push({WTID:WTID,table:table});
+                        //Zepto.alert( '删除的点可能有连接其他点，请手动修改相关点的连接方向','删除成功');
+                    }
+                }
+                    if(selectArr.length==0){
+                        Zepto.toast('请选择物探点');
+                    }
+                    else{
+                        layer.open({
+                            content: '你确定要删除？删除的点可能有连接其他点，请手动修改相关点的连接方向'
+                            ,btn: [ '确定','取消']
+                            ,yes: function(index){
+                                layer.close(index);
+                                for(var i=0;i<selectArr.length;i++){
+                                    DCI.app.backend.deletePoint(selectArr[i].table,'WTID',[selectArr[i].WTID],function(data){
+                                        if(data==1){
+                                            Zepto.toast('删除成功');
+                                            $('.msg_4 ul>li').eq(i).remove();
+                                            //重新加载点
+                                            _this.savePoint=[];
+                                            //清除所有覆盖物
+                                            _this.mapObj.clearMap( );
+                                            //点重新加载
+                                            _this._default();
+                                        }
+                                        else{
+                                            Zepto.toast(selectArr[i].WTID+'删除失败');
+                                        }
+                                    });
+                                }
+
+
+                            }
+                        })
+                    }
+            })
+
 
         },
         /*地图初始化*/
@@ -202,6 +280,7 @@ define(['suijs','moxie','plupload'], function () {
             //点击时候存入坐标到输入框
             $('.Lng').val( e.lnglat.lng);
             $('.Lat').val( e.lnglat.lat);
+            $('.GJ,.MS,.GS,.MSND').val('');
 
             /*实现窗口弹出 填写参数*/
             $('.alert_layer>div').css('display','none');
@@ -305,45 +384,88 @@ define(['suijs','moxie','plupload'], function () {
             this.clickMarks[0] = marker;
         },
 
-        _fiveClickMap:function(e){
+        _fiveClickMap:function(arr){
+
+            var _this=this;
+            var arr=[];
+            $('.msg_5>div').html('')
+           //设置地图标记点事件
+            _this.distanceEvent=function(e){
+                arr.push(this);
+                if(arr.length>1){
+                    var p1=arr[0].getPosition();
+                    var p2=arr[1].getPosition();
+                    var name1=arr[0].getExtData()['WTID'];
+                    var name2=arr[1].getExtData()['WTID'];
+                    var textPos = p1.divideBy(2).add(p2.divideBy(2));
+                    var distance =Math.round(p1.distance(p2));
+                    var path = [p1,p2];
+                    //绘画线
+                    var polyline = _this.setPoly(path,'dashed','red');
+                    _this.distancePoly.push(polyline);
+                    polyline.setMap(_this.mapObj);
+                    //_this.setText(textPos,distance*0.001+'公里');
+                    var html=$('.msg_5>div').html();
+                    $('.msg_5>div').html(html+`<b style="font-weight: normal;display: block">${name1}-${name2}:${(distance*0.001).toFixed((3))}公里</b>  `)
+                    arr.splice(0,1);
+
+                }
+            }
+
+            for(i=0;i<_this.savePoint.length;i++){
+                _this.savePoint[i].setClickable(true);
+                _this.savePoint[i].on('click',_this.distanceEvent)
+            }
 
         },
 
         //编辑点
         EditMark:function(){
             var _this=this;
+
+            this.EditEvent=function(e){
+                //获取自定义属性
+                var exData= this.getExtData();
+                /*实现窗口弹出 填写参数*/
+                $('.alert_layer>div').css('display','none');
+                $('.alert_layer,.layer_1').css('display','block');
+                $('.GJ,.MS,.GS,.MSND').val('');
+                $(`#msg_1_select option[value=${exData['H']}]`).prop('selected','selected');
+                $('#msg_1_select').trigger('change');
+                //实现赋值
+                _this._initForm(exData);
+
+                //保存当前正在点击的点
+                _this.cliclIng=this;
+
+
+            };
+
+            this.dragEvent=function(e){
+
+                console.log(e);
+                var exData= this.getExtData();
+                $('.alert_layer>div').css('display','none');
+                $('.alert_layer,.layer_1').css('display','block');
+                $('.GJ,.MS,.GS,.MSND').val('');
+                $(`#msg_1_select option[value=${exData['H']}]`).prop('selected','selected');
+                $('#msg_1_select').trigger('change');
+                //实现赋值
+                _this._initForm(exData);
+                //修改坐标 因为移动
+                $('.layer_1 ul:visible').find('.Lng').val(e.lnglat.lng);
+                $('.layer_1 ul:visible').find('.Lat').val(e.lnglat.lat);
+                _this.cliclIng=this;
+
+            }
             //给所有的点设计点击事件 设置移动事件
             //当点击之后出现表单 可修改属性
             for(i=0;i<this.savePoint.length;i++){
-                //设备点标记是可移动
+                //设备点标记是可移动 是否支持单击
                 this.savePoint[i].setDraggable(true);
-                this.savePoint[i].on('click',function(e){
-                    //获取自定义属性
-                   var exData= this.getExtData();
-                    /*实现窗口弹出 填写参数*/
-                    $('.alert_layer>div').css('display','none');
-                    $('.alert_layer,.layer_1').css('display','block');
-                    $(`#msg_1_select option[value=${exData['H']}]`).prop('selected','selected');
-                    $('#msg_1_select').trigger('change');
-                    //实现赋值
-                    _this._initForm(exData);
-
-                    //保存当前正在点击的点
-                    _this.cliclIng=this;
-
-
-                })
-                this.savePoint[i].on('dragend',function(e){
-
-                    var exData= this.getExtData();
-                    $('.alert_layer>div').css('display','none');
-                    $('.alert_layer,.layer_1').css('display','block');
-                    $(`#msg_1_select option[value=${exData['H']}]`).prop('selected','selected');
-                    $('#msg_1_select').trigger('change');
-                    //实现赋值
-                    _this._initForm(exData);
-                    _this.cliclIng=this;
-                });
+                this.savePoint[i].setClickable(true);
+                this.savePoint[i].on('click',_this.EditEvent);
+                this.savePoint[i].on('dragend',_this.dragEvent);
 
             }
         },
@@ -379,7 +501,7 @@ define(['suijs','moxie','plupload'], function () {
                 //title: title,
                 map: _this.mapObj,
                 label: { offset: new AMap.Pixel(0, 25), content: title },
-                animation: 'AMAP_ANIMATION_DROP',
+                //animation: 'AMAP_ANIMATION_DROP',
                 extData:extData == undefined?false:extData
                 //icon: new AMap.Icon({
                 //    size: new AMap.Size(28, 36),  //图标大小
@@ -403,14 +525,14 @@ define(['suijs','moxie','plupload'], function () {
                 verticalAlign: 'center',
                 map: _this.mapObj,
                 position: position,
-                zIndex: 1000,
+                zIndex: 10000,
                 style: {
                     //2
                     'margin-top':'-1.3rem',
-                    'margin-left':'1rem',
+                    'margin-left':'2rem',
                     'font-size':'.7rem',
                     'font-weight': 'bolder',
-                    'color': '#000',
+                    'color': 'red',
                     'background-color': 'transparent',
                     'border':'none',
 
@@ -424,10 +546,10 @@ define(['suijs','moxie','plupload'], function () {
         *覆盖物折线
         * polyArr 折线的二维数组
         * */
-        setPoly:function(polyArr,strokeStyle){
+        setPoly:function(polyArr,strokeStyle,color){
             polyline = new AMap.Polyline({
                 path: polyArr,          //设置线覆盖物路径
-                strokeColor: "#3366FF", //线颜色
+                strokeColor:color!=undefined?color: "#3366FF", //线颜色
                 // strokeStyle:'solid',
                 strokeOpacity: 1,       //线透明度
                 strokeWeight: 5,        //线宽
@@ -443,6 +565,7 @@ define(['suijs','moxie','plupload'], function () {
 
         /*清空覆盖物*/
         clearMark:function(){
+            var _this=this;
             if (this.clickMarks.length > 0) {
                 for(var i=0 , len=this.clickMarks.length;i<len;i++){
                     this.clickMarks[i].setMap(null);
@@ -456,10 +579,21 @@ define(['suijs','moxie','plupload'], function () {
                 this.clickPoly=[];
             }
             for(i=0;i<this.savePoint.length;i++){
-                this.savePoint[i].off('click');
-                this.savePoint[i].off('dragend');
+                // this.savePoint[i].removeListener(_this.EditEvent);
+                // this.savePoint[i].removeListener(_this.distanceEvent);
+                // this.savePoint[i].removeListener(_this.dragEvent);
+
+                this.savePoint[i].off('click',_this.EditEvent);
+                this.savePoint[i].off('click',_this.distanceEvent);
+                this.savePoint[i].off('dragend',_this.dragEvent);
                 this.savePoint[i].setDraggable(false);
+                this.savePoint[i].setClickable(false);
             }
+            for(i=0;i<this.distancePoly.length;i++){
+                this.distancePoly[i].setMap(null);
+
+            }
+            this.distancePoly=[];
 
             this.markArr=[];
         },
@@ -486,9 +620,9 @@ define(['suijs','moxie','plupload'], function () {
             //排水
             var arr=['给水','燃气','通信','电力','热力','工业','石油','综合','管沟','垃圾真空'];
 
-            var name=['js','rq','tx','dl','rl','gy','sy','zh','gg','ljzk'];
+            var name=['js','rq','tx','dl','rl','gy','sy','zh','gg','hl'];
 
-            var name1=['ps','ys','ws','hs'];
+            var name1=['ps','ys','ws','ywhl'];
             for(var i=0;i<arr.length;i++){
                 $('#msg_1_select').append(`<option data-index="0" data-name="${name[i]}" value="${arr[i]}">${arr[i]}</option>`);
             }
@@ -541,7 +675,7 @@ define(['suijs','moxie','plupload'], function () {
             }
         },
 
-        /*匹配名字*/
+        /*匹配名字 +1*/
         pipeName:function(name){
             var key=0;
             for(var i=0;i<this.savePoint.length;i++){
@@ -554,26 +688,52 @@ define(['suijs','moxie','plupload'], function () {
             key=key*1+1;
             return key;
         },
+        /*找出有没项目的值*/
+        isSome:function(key,data){
+            for(var i=0;i<this.savePoint.length;i++){
+                var keyData=(this.savePoint[i].getExtData( ))[key];
+                if(keyData == data){
+                    return true;
+                }
+            }
+            return false;
+        },
+
+
         /*连接方向的点*/
-//     _initLJFX:function(data,elem){
-//         elem.html('');
-//         elem.append('<option value="-1">无</option>');
-//         for(var i=0;i<data.length;i++) {
-//             elem.append(`<option value="${data[i]['WTID']}">${data[i]['WTID']}</option>`);
-//         }
-//     },
+       _initLJFX:function(data,elem){
+           elem.html('');
+           elem.append('<option value="-1">无</option>');
+           for(var i=0;i<data.length;i++) {
+               elem.append(`<option value="${data[i]['WTID']}">${data[i]['WTID']}</option>`);
+           }
+       },
       linkPoint:function(data,ALLdata){
           // console.log(ALLdata);
           for(var i=0;i<ALLdata.length;i++) {
-              if(ALLdata[i]['WTID']==data['LJFX']){
-                  var lineArr = [//折线的二维数组
-                      [ALLdata[i].Lng,ALLdata[i].Lat],
-                      [data.Lng,data.Lat],
-                  ];
-                  var polyline=this.setPoly(lineArr);
-                  polyline.setMap(this.mapObj);
+              if(ALLdata[i]['WTID']){
+                  if(ALLdata[i]['WTID']==data['LJFX']){
+                      var lineArr = [//折线的二维数组
+                          [ALLdata[i].Lng,ALLdata[i].Lat],
+                          [data.Lng,data.Lat],
+                      ];
+                      var polyline=this.setPoly(lineArr);
+                      polyline.setMap(this.mapObj);
 
+                  }
               }
+              else if((ALLdata[i].getExtData( ))['WTID']){
+                  if((ALLdata[i].getExtData( ))['WTID']==data['LJFX']){
+                      var lineArr = [//折线的二维数组
+                          [(ALLdata[i].getExtData( ))['Lng'],(ALLdata[i].getExtData( ))['Lat']],
+                          [data.Lng,data.Lat],
+                      ];
+                      var polyline=this.setPoly(lineArr);
+                      polyline.setMap(this.mapObj);
+
+                  }
+              }
+
           }
 
       },
@@ -625,7 +785,7 @@ define(['suijs','moxie','plupload'], function () {
                     obj1['H']=$('#msg_1_select').val();
                     dataObj=obj1;
                 }
-                console.log(dataObj);
+
                 if(tag=="new"){
                     DCI.app.backend.addPoint(table,dataObj,function(data){
 
@@ -635,20 +795,27 @@ define(['suijs','moxie','plupload'], function () {
                         }
                         Zepto.toast('新增成功');
                         if(table=="PipePointA"){
-                            $('.LJFX').eq(0).append(`<option value="${dataObj['WTID']}">${dataObj['WTID']}</option>`)
+                            $('.LJFX').eq(0).append(`<option value="${dataObj['WTID']}">${dataObj['WTID']}</option>`);
+                            $('#removeMark').append(`<li data-id="${dataObj['WTID']}" data-table="PipePointA"><span style="display:inline-block;width:50%">${dataObj['WTID']}</span><input type="checkbox"/></li>`);
                         }
                         else{
-                            $('.LJFX').eq(1).append(`<option value="${dataObj['WTID']}">${dataObj['WTID']}</option>`)
+                            $('.LJFX').eq(1).append(`<option value="${dataObj['WTID']}">${dataObj['WTID']}</option>`);
+                            $('#removeMark').append(`<li data-id="${dataObj['WTID']}" data-table="PipePointB"><span style="display:inline-block;width:50%">${dataObj['WTID']}</span><input type="checkbox"/></li>`);
                         }
                         $('.alert_layer,.alert_layer>div').css('display','none');
+
                         //展示点
                         var mark=_this.setMark([dataObj.Lng,dataObj.Lat],dataObj['WTID'],dataObj);
-                        //var mark=_this.setMark([dataObj.Lng,dataObj.Lat],dataObj['WTID'],dataObj);
                         //_this.setText([dataObj.Lng,dataObj.Lat],dataObj['WTID']);
 
                         //清除覆盖物
                         _this.clickMarks[0].setMap(null);//圆点
                         _this.savePoint.push(mark);
+                        //判断有没有连接方向，进行手动连接？
+                        if(dataObj['LJFX']!==-1){
+                            _this.linkPoint(dataObj,_this.savePoint);
+                            //dataObj[['LJFX']
+                        }
                     });
                 }
 
@@ -661,9 +828,12 @@ define(['suijs','moxie','plupload'], function () {
                           _this.mapObj.clearMap( );
                            //点重新加载
                            _this._default();
+                           setTimeout(function(){
+                               _this.EditMark();
+                           },100)
                            //重新赋值事件
-                           _this.EditMark();
-                           Zepto.toast('需改成功');
+
+                           Zepto.toast('修改成功');
                        }
                        else{
                            Zepto.toast('修改失败');

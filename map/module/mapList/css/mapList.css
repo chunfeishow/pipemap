@@ -1,6 +1,7 @@
 
 @import url("../../../libs/font-awesome/font-awesome.min.css");
 @import url("../../../libs/map/mapMain.css");
+@import url("../../../libs/layer_mobile/need/layer.css");
 
 
 /*@import url("../libs/bootstrap/bootstrap.min.css");*/
@@ -129,10 +130,14 @@ p{margin:0;}
     width:87%;
     padding:.3rem;
 }
+.msg_1,.msg_9,.msg_4{
+    /*width:183%*/
+ }
 .alert_msg span{
-    height:2rem;
-    line-height:2rem;
+    /*height:1rem;*/
+    /*line-height:1rem;*/
     background-color:#eee;
+    padding:.3rem;
 }
 .submit{
     margin-right:2rem;
@@ -142,10 +147,11 @@ p{margin:0;}
     clear:both;
     display:block;
 }
-.msg_4,.msg_5,.msg_8{
+.msg_4,.msg_8{
     background-color:#eee;
     width:90%;
 }
+
 .msg_4>form{
     padding:.5rem;
 }
@@ -162,6 +168,12 @@ p{margin:0;}
     width:30%;
     text-align: right;
 }
+.msg_5{
+  background:#eee;
+    width: 90%;
+    height: 6rem;
+    overflow: scroll;
+}
 
 .sure{
     margin:0 1rem;
@@ -170,4 +182,10 @@ p{margin:0;}
     border: none;
   background-color: transparent;
     font-weight: bold;
+    margin-left:0.3rem;
+}
+#removeMark li{
+    float:left;
+    width:33%;
+    padding:.5rem;
 }

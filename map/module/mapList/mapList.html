@@ -23,9 +23,9 @@
             <div class="list-icon">
                 <span class=" fa fa-ellipsis-v" id="icon_1"></span>
                 <span class="fa fa-pencil-square-o" id="icon_9"></span>
-                <span class="fa fa-code-fork" id="icon_2"></span>
-                <span class="fa fa-deaf" id="icon_3"></span>
-                <span class="fa fa-check-square-o" id="icon_4"></span>
+                <!--<span class="fa fa-code-fork" id="icon_2"></span>-->
+                <!--<span class="fa fa-deaf" id="icon_3"></span>-->
+                <span class="fa fa-trash" id="icon_4"></span>
                 <span class="fa fa-cc-amex" id="icon_5"></span>
                 <span class="fa fa-plus" id="icon_6"></span>
                 <span class="fa fa-minus" id="icon_7"></span>
@@ -62,81 +62,29 @@
         </div>
 
         <div class="msg_4 pull-right list-block" >
-            <h4 style="margin:.4rem">测量收点</h4>
-            <ul style="background-color:#eee">
-                <li>
-                    <div class="item-content">
-                        <div class="item-inner">
-                            <div class="item-title label">未测的点</div>
-                            <div class="item-input">
-                                <input type="text" placeholder=" " readonly >
-                            </div>
-                            <div class="item-input">
-                                <button class="button button-fill" type="button">查看</button>
-                            </div>
-                        </div>
-
-                    </div>
-                </li>
-
-                <li>
-                    <div class="item-content">
-                        <div class="item-inner">
-                            <div class="item-title label">物探编号</div>
-                            <div class="item-input">
-                                <input type="text" placeholder=" " readonly >
-                            </div>
-                        </div>
-
-                    </div>
-                </li>
-
-                <li>
-                    <div class="item-content">
-                        <div class="item-inner">
-                            <div class="item-input">
-                                <button class="button button-fill" type="button">隐藏已测标志</button>
-                            </div>
-                        </div>
-
-                    </div>
-                </li>
-
-                <li>
-                    <div class="item-content">
-                        <div class="item-inner">
-                            <div class="item-title label">完成测点</div>
-                            <div class="item-input">
-                                <label class="label-switch">
-                                    <input type="checkbox">
-                                    <div class="checkbox"></div>
-                                </label>
-                            </div>
-                        </div>
-
-                    </div>
-                </li>
-
+            <div style="margin:.4rem">全选&nbsp;&nbsp;<input type="checkbox" id="allSelect"/><span class="pull-right" ><a href="#" class="button button-fill removeMarkBtn">删除 </a></span></div>
+            <ul id="removeMark" style="clear:both">
             </ul>
 
         </div>
 
         <div class="msg_5 pull-right list-block">
             <h4 style="margin:.4rem">测量长度</h4>
+            <div style="padding-left:.5rem"></div>
+            <!--<ul style="background-color:#eee">-->
+                <!--<li>-->
+                    <!--<div class="item-content">-->
+                        <!--<div class="item-inner">-->
+                            <!--&lt;!&ndash;<div class="item-title label">线条长度</div>&ndash;&gt;-->
+                            <!--<div class="item-input">-->
+                                <!--&lt;!&ndash;<input type="text" placeholder=" " readonly >&ndash;&gt;-->
+                                <!--<span></span>-->
+                            <!--</div>-->
+                        <!--</div>-->
 
-            <ul style="background-color:#eee">
-                <li>
-                    <div class="item-content">
-                        <div class="item-inner">
-                            <div class="item-title label">线条长度</div>
-                            <div class="item-input">
-                                <input type="text" placeholder=" " readonly >
-                            </div>
-                        </div>
-
-                    </div>
-                </li>
-            </ul>
+                    <!--</div>-->
+                <!--</li>-->
+            <!--</ul>-->
         </div>
 
         <div class="msg_8 pull-right list-block" >

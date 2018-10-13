@@ -15,6 +15,7 @@ var Default_Paths = {
 
     'sqlite':'libs/sqlite/sqlite',
     'form':'backend/form',
+    'layer':'libs/layer_mobile/layer'
  
 
 
